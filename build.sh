@@ -13,6 +13,8 @@
 node_modules="../node_modules"
 universal="../node_modules/universal"
 repoURL="git://github.com/GPII/universal.git" 
+rfidListenerDir="../pcsc-tools"
+rfidListenerRepoURL="https://github.com/sgithens/pcsc-tools.git" # TODO: Change to project repository
 usbListenerDir="./usbDriveListener"
 gpiiInstallDir="/usr/local/gpii"
 gpiiStateDir="/var/lib/gpii"
@@ -32,6 +34,13 @@ else
     echo "$universal does not exist"
     echo "cloning universal"
     git clone "$repoURL" "$universal"
+fi
+if [ -d $rfidListenerDir ]; then
+    echo "$rfidListenerDir already exists"
+else
+    echo "$rfidListenerDir does not exist"
+    echo "cloning the RFID User Listener repository"
+    git clone "$rfidListenerRepoURL" "$rfidListenerDir"
 fi
 
 # Compile the GSettings C++ Bridge
@@ -61,3 +70,8 @@ fi
 # TODO: We should install the entire GPII in /usr/local/gpii, not just the USB Listener
 sudo cp -r "$usbListenerDir/bin" "$gpiiInstallDir/bin"
 sudo cp "$usbListenerDir/80-gpii.rules" /etc/udev/rules.d/
+
+# Compile the RFID User Listener
+cd $rfidListenerDir
+make all
+sudo make install

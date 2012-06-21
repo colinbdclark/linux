@@ -11,9 +11,14 @@
 # https://github.com/gpii/universal/LICENSE.txt
 
 fileName="gpii.js"
+rfidListenerRepoDir="../pcsc-tools"
+linuxRepoDir=$PWD
 
-# Build and install the GPII
-./build.sh
+# Start the RFID User Listener
+cd $rfidListenerRepoDir
+sudo /usr/sbin/pcscd
+./pcsc_scan &
 
 # Start the Flow Manager
+cd $linuxRepoDir
 node "$fileName"

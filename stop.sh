@@ -1,0 +1,1 @@
+killall pcsc_scan
